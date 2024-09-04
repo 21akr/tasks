@@ -1,3 +1,2 @@
-export * from './UserRepository.interface';
-export * from './UserSessionRepository.interface';
-export * from './TaskRepository.interface';
+export * from './base';
+export * from './user';

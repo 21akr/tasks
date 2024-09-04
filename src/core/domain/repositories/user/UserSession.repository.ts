@@ -1,9 +1,8 @@
 import { UserSessionEntity } from '../../entities';
-import { UserSessionSchema } from '../../schemas';
-import { UserSessionModel } from '../../models';
 import { FilterQuery, Types } from 'mongoose';
 import { BaseCRUDRepository } from '../base';
-import { UserSessionRepositoryInterface } from '../../../infrastructure';
+import { PaginationInterface, UserSessionRepositoryInterface } from '../../../infrastructure';
+import { UserSessionModel, UserSessionSchema } from '../../../database';
 
 export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity, UserSessionSchema> implements UserSessionRepositoryInterface {
   async create(_userSession: UserSessionEntity): Promise<UserSessionEntity> {
@@ -38,12 +37,12 @@ export class UserSessionRepository extends BaseCRUDRepository<UserSessionEntity,
     return deleted.deletedCount >= 1;
   }
 
-  async list(filter?: FilterQuery<any>): Promise<Array<UserSessionEntity>> {
+  async list(pagination?: PaginationInterface, filter?: FilterQuery<any>, sort?: any): Promise<Array<UserSessionEntity>> {
     const userSessions = await UserSessionModel.find(filter);
     return this.multipleConverter(userSessions, UserSessionEntity);
   }
 
-  async countDocumentsByFilter(filter: object): Promise<number> {
+  async countDocumentsByFilter(filter: FilterQuery<UserSessionSchema>): Promise<number> {
     return UserSessionModel.countDocuments(filter);
   }
 }

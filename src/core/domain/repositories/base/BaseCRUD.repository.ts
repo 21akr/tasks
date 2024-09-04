@@ -1,5 +1,5 @@
 import { FilterQuery, Types } from 'mongoose';
-import { BaseCRUDInterface, BaseEntityInterface } from '../../../infrastructure';
+import { BaseCRUDInterface, BaseEntityInterface, PaginationInterface } from '../../../infrastructure';
 
 export abstract class BaseCRUDRepository<T extends BaseEntityInterface<T, K>, K> implements BaseCRUDInterface<T> {
   abstract create(arg: T): Promise<T>;
@@ -8,7 +8,7 @@ export abstract class BaseCRUDRepository<T extends BaseEntityInterface<T, K>, K>
 
   abstract getById(id: Types.ObjectId): Promise<T>;
 
-  abstract list(filter?: FilterQuery<any>): Promise<Array<T>>;
+  abstract list(pagination?: PaginationInterface, filter?: FilterQuery<any>, sort?: any): Promise<Array<T>>;
 
   protected multipleConverter(_modelClassItems: K[], TCreator: { new(): T }): Array<T> {
     const entities: T[] = [];

@@ -2,7 +2,7 @@ import { TaskEntity } from '../../entities';
 import { TaskModel, TaskSchema } from '../../../database';
 import { FilterQuery, Types } from 'mongoose';
 import { BaseCRUDRepository } from '../base';
-import { TaskRepositoryInterface } from '../../../infrastructure';
+import { PaginationInterface, TaskRepositoryInterface } from '../../../infrastructure';
 
 export class TaskRepository extends BaseCRUDRepository<TaskEntity, TaskSchema> implements TaskRepositoryInterface {
   async create(_task: TaskEntity): Promise<TaskEntity> {
@@ -31,18 +31,23 @@ export class TaskRepository extends BaseCRUDRepository<TaskEntity, TaskSchema> i
 
     return new TaskEntity().convertToEntity(found)!;
   }
-  
+
   async deleteById(_id: Types.ObjectId): Promise<boolean> {
     const deleted = await TaskModel.deleteOne({ _id });
     return deleted.deletedCount === 1;
   }
 
-  async list(filter?: FilterQuery<any>): Promise<Array<TaskEntity>> {
+  async list(pagination?: PaginationInterface, filter?: FilterQuery<any>, sort?: any): Promise<Array<TaskEntity>> {
     const tasks = await TaskModel.find(filter);
     return this.multipleConverter(tasks, TaskEntity);
   }
 
   async countDocumentsByFilter(filter: FilterQuery<TaskSchema>): Promise<number> {
     return TaskModel.countDocuments(filter);
+  }
+
+  async getByUserId(_userId: Types.ObjectId): Promise<Array<TaskEntity>> {
+    const found = await TaskModel.find({ userId: _userId });
+    return this.multipleConverter(found, TaskEntity);
   }
 }

@@ -1,5 +1,5 @@
-import { BaseCRUDInterface } from './base';
-import { UserEntity } from '../../domain';
+import { BaseCRUDInterface } from '../base';
+import { UserEntity } from '../../../domain';
 
 export interface UserRepositoryInterface extends BaseCRUDInterface<UserEntity> {
 

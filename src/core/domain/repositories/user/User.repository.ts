@@ -1,7 +1,7 @@
 import { UserEntity } from '../../entities';
 import { UserModel, UserSchema } from '../../../database';
 import { FilterQuery, Types } from 'mongoose';
-import { UserRepositoryInterface, UserRoleEnum } from '../../../infrastructure';
+import { PaginationInterface, UserRepositoryInterface, UserRoleEnum } from '../../../infrastructure';
 import { BaseCRUDRepository } from '../base';
 
 export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> implements UserRepositoryInterface {
@@ -15,7 +15,7 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
     const user: UserSchema = _user.convertToSchema();
     const updated = await UserModel.findOneAndUpdate({ _id: _user.getId() }, { $set: user }, { new: true });
 
-    if (!updated) {
+    if(!updated) {
       throw new Error('User not found');
     }
 
@@ -25,7 +25,7 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
   async getById(_id: Types.ObjectId): Promise<UserEntity> {
     const found = await UserModel.findOne({ _id });
 
-    if (!found) {
+    if(!found) {
       throw new Error('User not found');
     }
 
@@ -37,7 +37,7 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
     return deleted.deletedCount === 1;
   }
 
-  async list(filter?: FilterQuery<any>): Promise<Array<UserEntity>> {
+  async list(pagination?: PaginationInterface, filter?: FilterQuery<any>, sort?: any): Promise<Array<UserEntity>> {
     const users = await UserModel.find(filter);
     return this.multipleConverter(users, UserEntity);
   }

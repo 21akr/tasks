@@ -1,7 +1,6 @@
-import { TaskStatusEnum } from '../../infrastructure';
+import { BaseEntityInterface, TaskStatusEnum } from '../../infrastructure';
 import { TaskSchema } from '../../database';
 import { Types } from 'mongoose';
-import { BaseEntityInterface } from '../../infrastructure/interfaces/base';
 
 export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
   protected _id?: Types.ObjectId;

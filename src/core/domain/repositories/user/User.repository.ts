@@ -14,21 +14,11 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
   async update(_user: UserEntity): Promise<UserEntity> {
     const user: UserSchema = _user.convertToSchema();
     const updated = await UserModel.findOneAndUpdate({ _id: _user.getId() }, { $set: user }, { new: true });
-
-    if(!updated) {
-      throw new Error('User not found');
-    }
-
     return new UserEntity().convertToEntity(updated)!;
   }
 
   async getById(_id: Types.ObjectId): Promise<UserEntity> {
     const found = await UserModel.findOne({ _id });
-
-    if(!found) {
-      throw new Error('User not found');
-    }
-
     return new UserEntity().convertToEntity(found)!;
   }
 
@@ -44,6 +34,11 @@ export class UserRepository extends BaseCRUDRepository<UserEntity, UserSchema> i
 
   async isAdmin(user: UserEntity): Promise<boolean> {
     return user.getUserRole() === UserRoleEnum.ADMIN;
+  }
+
+  async getByEmail(email: string): Promise<UserEntity> {
+    const found = await UserModel.findOne({ email });
+    return new UserEntity().convertToEntity(found);
   }
 
   async countDocumentsByFilter(filter: FilterQuery<UserSchema>): Promise<number> {

@@ -11,6 +11,12 @@ export class UserSchema {
   @prop({ enum: UserStatusEnum, type: String })
   status?: UserStatusEnum;
 
+  @prop({ type: String })
+  email?: string;
+
+  @prop({ type: String })
+  password?: string;
+
   @prop({ enum: UserRoleEnum, type: String })
   userRole?: UserRoleEnum;
 

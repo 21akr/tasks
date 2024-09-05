@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { Types } from 'mongoose';
 import { BaseIDParams, GetUserResponse } from '../../definitions';
 import { Repository } from '../../core';

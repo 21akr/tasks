@@ -1,10 +1,10 @@
-import express from 'express';
+import * as express from 'express';
 import { Types } from 'mongoose';
-import { BaseIDParams, GetUserResponse } from '../../definitions';
+import { BaseIDParams, GetTaskResponse } from '../../definitions';
 import { Repository } from '../../core';
 
 export async function GetTaskByIdController(req: express.Request, res: express.Response) {
-  let response: GetUserResponse;
+  let response: GetTaskResponse;
   let params: BaseIDParams;
 
   try {
@@ -15,12 +15,12 @@ export async function GetTaskByIdController(req: express.Request, res: express.R
   }
 
   try {
-    const user = await Repository.User().getById(new Types.ObjectId(params.ID));
-    if (!user) {
-      res.send('User Not Found');
+    const task = await Repository.Task().getById(new Types.ObjectId(params.ID));
+    if (!task) {
+      res.send('Task Not Found');
     }
 
-    response = new GetUserResponse(user);
+    response = new GetTaskResponse(task);
     return res.json(response);
   } catch (err) {
     return res.send(err);

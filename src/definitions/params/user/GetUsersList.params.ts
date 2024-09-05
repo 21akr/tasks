@@ -1,7 +1,7 @@
-import joi from 'joi';
+import * as joi from 'joi';
 import { BaseListParams } from '../base';
 
-export class GetUserListParams extends BaseListParams {
+export class GetUsersListParams extends BaseListParams {
   search?: string;
 
   constructor(params) {
@@ -14,6 +14,6 @@ export class GetUserListParams extends BaseListParams {
   }
 }
 
-export const GetUserListParamsSchema = joi.object<GetUserListParams>({
+export const GetUserListParamsSchema = joi.object<GetUsersListParams>({
   search: joi.string(),
 });

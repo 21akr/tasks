@@ -1,16 +1,15 @@
 import { Types } from 'mongoose';
-import { UserStatusEnum } from '../../../enums';
-import { UserEntity } from '../../../../database';
+import { UserEntity, UserStatusEnum } from '../../../core';
 
-export class GetUserListResponse {
+export class GetUsersListResponse {
   id?: Types.ObjectId;
-  fullName?: string;
+  username?: string;
   email?: string;
   status?: UserStatusEnum;
 
   constructor(user: UserEntity) {
     this.id = user.getId();
-    this.fullName = user.getFullName();
+    this.username = user.getUsername();
     this.email = user.getEmail();
     this.status = user.getStatus();
   }

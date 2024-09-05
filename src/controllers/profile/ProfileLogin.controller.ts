@@ -1,9 +1,9 @@
-import express from 'express';
-import { ProfileLoginParams, ProfileLoginResponse, UserSessionStatusEnum, UserStatusEnum } from '../../infrastructure';
-import { Repository, UserSessionEntity } from '../../database';
+import * as express from 'express';
 import { PasswordService, TokenService } from '../../services';
 import { Types } from 'mongoose';
 import moment from 'moment';
+import { ProfileLoginParams, ProfileLoginResponse } from '../../definitions';
+import { Repository, UserSessionEntity, UserSessionStatusEnum, UserStatusEnum } from '../../core';
 
 export async function ProfileLoginController(req: express.Request, res: express.Response) {
   let params: ProfileLoginParams;
@@ -18,9 +18,11 @@ export async function ProfileLoginController(req: express.Request, res: express.
 
   try {
     const user = await Repository.User().getByEmail(params.email);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    const userID = user.getId();
+    if (!user) {
+      throw new Error('User Not Found');
+    }
 
+    const userID = user.getId();
     const isValidPassword = await new PasswordService().compare(params.password, user.getPassword());
     if (!isValidPassword) {
       return res.status(401).json('Invalid login credentials');

@@ -1,11 +1,14 @@
-import joi from 'joi';
-import { UpdateUserParams } from './UpdateUser.params';
+import * as joi from 'joi';
+import { UserRoleEnum } from '../../../core';
 
-export class CreateUserParams extends UpdateUserParams {
+export class CreateUserParams {
+  username?: string;
+  userRole?: UserRoleEnum;
   email?: string;
 
   constructor(params: CreateUserParams) {
-    super(params);
+    this.username = params.username;
+    this.userRole = params.userRole;
     this.email = params.email;
   }
 
@@ -15,5 +18,14 @@ export class CreateUserParams extends UpdateUserParams {
 }
 
 export const CreateUserParamsSchema = joi.object<CreateUserParams>({
-  email: joi.string().trim().required(),
+  username: joi.string().trim().required(),
+  userRole: joi.string().valid(...Object.values(UserRoleEnum)).required(),
+  email: joi.string()
+    .trim()
+    .email()
+    .required()
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .messages({
+      'string.pattern.base': 'Invalid email format',
+    }),
 });

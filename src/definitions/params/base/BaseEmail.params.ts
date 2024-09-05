@@ -1,4 +1,4 @@
-import joi from 'joi';
+import * as joi from 'joi';
 
 export class BaseEmailParams {
   email?: string;
@@ -13,5 +13,12 @@ export class BaseEmailParams {
 }
 
 export const BaseEmailParamsSchema = joi.object<BaseEmailParams>({
-  email: joi.string().trim().email().required(),
+  email: joi.string()
+    .trim()
+    .email()
+    .required()
+    .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+    .messages({
+      'string.pattern.base': 'Invalid email format',
+    }),
 });

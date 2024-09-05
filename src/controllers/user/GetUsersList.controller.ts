@@ -1,12 +1,12 @@
-import express from 'express';
+import * as express from 'express';
 import { FilterQuery } from 'mongoose';
 import { BaseListInterface } from '../../core';
-import { GetUserListParams, GetUserListResponse, ListParams } from '../../definitions';
-import { getUsersListCase } from '../../cases/user';
+import { GetUsersListParams, GetUsersListResponse, ListParams } from '../../definitions';
+import { getUsersListCase } from '../../cases';
 
 export async function GetUsersListController(req: express.Request, res: express.Response) {
-  let params: GetUserListParams;
-  let response: BaseListInterface<GetUserListResponse> = {
+  let params: GetUsersListParams;
+  let response: BaseListInterface<GetUsersListResponse> = {
     meta: {
       count: 0,
     },
@@ -16,14 +16,14 @@ export async function GetUsersListController(req: express.Request, res: express.
   const filter: FilterQuery<any> = {};
 
   try {
-    params = await new GetUserListParams(req.query).validate();
+    params = await new GetUsersListParams(req.query).validate();
   } catch (err) {
     console.error(err);
     return res.status(400).send(`Invalid request parameters \n ${err}`);
   }
 
   try {
-    if(params.search && params.search.length > 2) {
+    if (params.search && params.search.length > 2) {
       filter.$or = params.search
         .split(' ')
         .filter(Boolean)
@@ -43,7 +43,7 @@ export async function GetUsersListController(req: express.Request, res: express.
     const list = await getUsersListCase.execute(getUserListParams);
 
     response.meta = list.meta;
-    response.items = list.items.map(users => new GetUserListResponse(users));
+    response.items = list.items.map(users => new GetUsersListResponse(users));
 
     return res.json(response);
   } catch (err) {

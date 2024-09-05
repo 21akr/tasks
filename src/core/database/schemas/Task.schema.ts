@@ -9,6 +9,12 @@ export class TaskSchema {
   @prop({ type: Types.ObjectId, ref: () => UserSchema })
   userId?: Types.ObjectId;
 
+  @prop({ type: String })
+  title?: string;
+
+  @prop({ type: String })
+  description?: string;
+
   @prop({ enum: TaskStatusEnum, type: String })
   status?: TaskStatusEnum;
 

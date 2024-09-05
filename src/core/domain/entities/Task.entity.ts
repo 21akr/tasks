@@ -5,6 +5,8 @@ import { Types } from 'mongoose';
 export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
   protected _id?: Types.ObjectId;
   protected _userId?: Types.ObjectId;
+  protected _title?: string;
+  protected _description?: string;
   protected _status?: TaskStatusEnum;
   protected _createdAt?: Date;
   protected _updatedAt?: Date;
@@ -16,6 +18,16 @@ export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
 
   buildUserId(_userId?: Types.ObjectId): TaskEntity {
     this._userId = _userId;
+    return this;
+  }
+
+  buildTitle(_title?: string): TaskEntity {
+    this._title = _title;
+    return this;
+  }
+
+  buildDescription(_description?: string): TaskEntity {
+    this._description = _description;
     return this;
   }
 
@@ -34,12 +46,20 @@ export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
     return this;
   }
 
+  getId(): Types.ObjectId {
+    return <Types.ObjectId>this._id;
+  }
+
   getUserId(): Types.ObjectId {
     return <Types.ObjectId>this._userId;
   }
 
-  getId(): Types.ObjectId {
-    return <Types.ObjectId>this._id;
+  getTitle(): string {
+    return <string>this._title;
+  }
+
+  getDescription(): string {
+    return <string>this._description;
   }
 
   getStatus(): TaskStatusEnum {
@@ -55,9 +75,11 @@ export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
   }
 
   convertToEntity(user: TaskSchema): TaskEntity | null {
-    if(!user) return null;
+    if (!user) return null;
     this.buildId(user._id)
       .buildUserId(user.userId)
+      .buildTitle(user.title)
+      .buildDescription(user.description)
       .buildStatus(user.status)
       .buildCreatedAt(user.createdAt)
       .buildUpdatedAt(user.updatedAt);
@@ -68,6 +90,8 @@ export class TaskEntity implements BaseEntityInterface<TaskEntity, TaskSchema> {
     return {
       _id: this.getId(),
       userId: this.getUserId(),
+      title: this.getTitle(),
+      description: this.getDescription(),
       status: this.getStatus(),
       createdAt: this.getCreatedAt(),
       updatedAt: this.getUpdatedAt(),

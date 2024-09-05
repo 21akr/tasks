@@ -1,8 +1,7 @@
-import { UserEntity } from '../../../../database';
-import { GetUserListResponse } from './GetUserList.response';
-import { UserRoleEnum } from '../../../enums';
+import { GetUsersListResponse } from './GetUsersList.response';
+import { UserEntity, UserRoleEnum } from '../../../core';
 
-export class GetUserResponse extends GetUserListResponse {
+export class GetUserResponse extends GetUsersListResponse {
   userRole: UserRoleEnum;
 
   createdAt: Date;

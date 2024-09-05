@@ -1,5 +1,5 @@
-import { MongoConnectionStatusEnum } from '../infrastructure';
 import mongoose, { ConnectOptions, Mongoose } from 'mongoose';
+import { MongoConnectionStatusEnum } from '../core';
 
 export class MongoService {
   uri: string;

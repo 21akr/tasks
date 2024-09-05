@@ -1,7 +1,7 @@
-import express from 'express';
-import { BaseIDParams, GetUserResponse, UpdateUserParams } from '../../infrastructure';
-import { Repository } from '../../database';
+import * as express from 'express';
 import { Types } from 'mongoose';
+import { Repository } from '../../core';
+import { BaseIDParams, GetUserResponse, UpdateUserParams } from '../../definitions';
 
 export async function UpdateUserController(req: express.Request, res: express.Response) {
   let response: GetUserResponse;
@@ -22,7 +22,7 @@ export async function UpdateUserController(req: express.Request, res: express.Re
       res.send('User Not Found');
     }
 
-    const updated = user.buildFullName(params.fullName).buildUserRole(params.userRole);
+    const updated = user.buildUsername(params.username).buildUserRole(params.userRole);
 
     response = new GetUserResponse(updated);
     return res.json(response);

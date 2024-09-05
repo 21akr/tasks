@@ -1,6 +1,5 @@
-import { BaseUserRequestInterface, UserSessionStatusEnum, UserStatusEnum } from '../../infrastructure';
-import express from 'express';
-import { Repository } from '../../database';
+import * as express from 'express';
+import { BaseUserRequestInterface, Repository, UserSessionStatusEnum, UserStatusEnum } from '../../core';
 
 export async function ProfileLogoutController(req: BaseUserRequestInterface, res: express.Response) {
   const user = req?.user;

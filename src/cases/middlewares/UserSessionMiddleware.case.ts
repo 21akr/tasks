@@ -1,7 +1,13 @@
 import { TokenService } from '../../services';
-import { Repository, UserEntity, UserSessionEntity } from '../../database';
 import { Types } from 'mongoose';
-import { BaseCaseInterface, UserSessionStatusEnum, UserStatusEnum } from '../../infrastructure';
+import {
+  BaseCaseInterface,
+  Repository,
+  UserEntity,
+  UserSessionEntity,
+  UserSessionStatusEnum,
+  UserStatusEnum,
+} from '../../core';
 
 interface UserSessionMiddlewareCaseParams {
   accessToken: string;
@@ -27,7 +33,7 @@ export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionM
       const session = await Repository.UserSession().getById(new Types.ObjectId(String(payload.session)));
       const user = await Repository.User().getById(payload.user as Types.ObjectId);
 
-      if (!session || session.getStatus() !== UserSessionStatusEnum.ACTIVE) {
+      if (!session || session.getStatus() === UserSessionStatusEnum.INACTIVE) {
         throw new Error('Invalid or inactive session');
       }
 

@@ -1,4 +1,4 @@
-import joi from 'joi';
+import * as joi from 'joi';
 
 export class BaseIDParams {
   ID?: string;

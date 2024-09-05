@@ -1,4 +1,4 @@
-export * from './base/BaseID.params';
-export * from './base/List.params';
+export * from './base';
 export * from './user';
 export * from './profile';
+export * from './task';

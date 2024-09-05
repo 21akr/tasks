@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { Types } from 'mongoose';
 import { BaseIDParams } from '../../definitions';
 import { Repository } from '../../core';
@@ -14,10 +14,9 @@ export async function DeleteTaskByIdController(req: express.Request, res: expres
   }
 
   try {
-    const deleteSessions = await Repository.UserSession().deleteByUserId(new Types.ObjectId(params.ID));
-    const user = await Repository.User().deleteById(new Types.ObjectId(params.ID));
+    const deleted = await Repository.Task().deleteById(new Types.ObjectId(params.ID));
 
-    return res.json({ userDeleted: user, sessionsDeleted: deleteSessions });
+    return res.json({ taskDeleted: deleted });
   } catch (err) {
     console.error(err);
     return res.send(err);

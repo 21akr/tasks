@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { PasswordService } from '../../services';
 import { Repository, UserEntity, UserStatusEnum } from '../../core';
 import { CreateUserParams, GetUserResponse } from '../../definitions';

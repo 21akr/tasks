@@ -40,10 +40,10 @@ export const userRoutes = nestedRoutes('/user', user => {
 
 export const taskRoutes = nestedRoutes('/task', task => {
   task.use(UserSessionMiddleware);
+
   task.post('/', CreateTaskController);
   task.get('/list/:userId', GetTasksListByUserIdController);
   task.get('/:id', GetTaskByIdController);
   task.put('/:id', UpdateTaskController);
   task.delete('/:id', DeleteTaskByIdController);
-
 });

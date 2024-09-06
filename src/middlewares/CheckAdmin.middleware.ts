@@ -5,7 +5,7 @@ export async function CheckAdminMiddleware(req: BaseUserRequestInterface, res: e
   try {
     const user = req?.user;
 
-    const isAdmin = Repository.User().isAdmin(user);
+    const isAdmin = await Repository.User().isAdmin(user);
 
     if (!isAdmin) {
       throw new Error('Access denied');
@@ -14,6 +14,6 @@ export async function CheckAdminMiddleware(req: BaseUserRequestInterface, res: e
     return next();
   } catch (err) {
     console.error('Error while checking admin validation:', err);
-    return res.status(401).send('Invalid Credentials');
+    return res.status(401).send('Access denied');
   }
 }

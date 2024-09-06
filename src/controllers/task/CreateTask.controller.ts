@@ -3,8 +3,8 @@ import { Repository, TaskEntity } from '../../core';
 import { CreateTaskParams, GetTaskResponse } from '../../definitions';
 
 export async function CreateTaskController(req: express.Request, res: express.Response) {
-  let response: GetTaskResponse;
   let params: CreateTaskParams;
+  let response: GetTaskResponse;
 
   try {
     params = await new CreateTaskParams(req.body).validate();
@@ -15,11 +15,15 @@ export async function CreateTaskController(req: express.Request, res: express.Re
 
   try {
     const newTask = new TaskEntity()
-      .buildUserId(params?.userId)
       .buildStatus(params?.status)
       .buildTitle(params?.title)
       .buildDescription(params?.description);
 
+    if (params.userId) {
+      newTask.buildUserId(params?.userId);
+    } else {
+      newTask.buildUserId(req.user._id);
+    }
 
     const created = await Repository.Task().create(newTask);
 

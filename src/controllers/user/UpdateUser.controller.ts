@@ -1,15 +1,15 @@
 import * as express from 'express';
 import { Types } from 'mongoose';
 import { Repository } from '../../core';
-import { BaseIDParams, GetUserResponse, UpdateUserParams } from '../../definitions';
+import { BaseIdParams, GetUserResponse, UpdateUserParams } from '../../definitions';
 
 export async function UpdateUserController(req: express.Request, res: express.Response) {
   let response: GetUserResponse;
-  let idParams: BaseIDParams;
+  let idParams: BaseIdParams;
   let params: UpdateUserParams;
 
   try {
-    idParams = await new BaseIDParams(req.params).validate();
+    idParams = await new BaseIdParams(req.params).validate();
     params = await new UpdateUserParams(req.body).validate();
   } catch (err) {
     console.error(err);
@@ -17,7 +17,7 @@ export async function UpdateUserController(req: express.Request, res: express.Re
   }
 
   try {
-    const user = await Repository.User().getById(new Types.ObjectId(idParams.ID));
+    const user = await Repository.User().getById(new Types.ObjectId(idParams.id));
     if (!user) {
       res.send('User Not Found');
     }

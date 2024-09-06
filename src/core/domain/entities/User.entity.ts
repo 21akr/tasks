@@ -1,15 +1,15 @@
-import { UserRoleEnum, UserStatusEnum } from '../../infrastructure';
+import { BaseEntityInterface, UserRoleEnum, UserStatusEnum } from '../../infrastructure';
 import { UserSchema } from '../../database';
 import { Types } from 'mongoose';
-import { BaseEntityInterface } from '../../infrastructure/interfaces/base';
 
-export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema>{
+export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema> {
   protected _id?: Types.ObjectId;
   protected _username?: string;
   protected _email?: string;
   protected _password?: string;
   protected _status?: UserStatusEnum;
   protected _userRole?: UserRoleEnum;
+  protected _profilePicture?: string;
   protected _createdAt?: Date;
   protected _updatedAt?: Date;
 
@@ -40,6 +40,11 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema>{
 
   buildUserRole(userRole?: UserRoleEnum): UserEntity {
     this._userRole = userRole;
+    return this;
+  }
+
+  buildProfilePicture(profilePicture?: string): UserEntity {
+    this._profilePicture = profilePicture;
     return this;
   }
 
@@ -77,6 +82,10 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema>{
     return <UserRoleEnum>this._userRole;
   }
 
+  getProfilePicture(): string {
+    return <string>this._profilePicture;
+  }
+
   getCreatedAt(): Date {
     return <Date>this._createdAt;
   }
@@ -86,15 +95,16 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema>{
   }
 
   convertToEntity(user: UserSchema): UserEntity | null {
-    if(!user) return null;
+    if (!user) return null;
     this.buildId(user._id)
       .buildUsername(user.username)
       .buildEmail(user.email)
       .buildPassword(user.password)
       .buildStatus(user.status)
+      .buildUserRole(user.userRole)
+      .buildProfilePicture(user.profilePicture)
       .buildCreatedAt(user.createdAt)
-      .buildUpdatedAt(user.updatedAt)
-      .buildUserRole(user.userRole);
+      .buildUpdatedAt(user.updatedAt);
     return this;
   }
 
@@ -105,9 +115,10 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema>{
       email: this.getEmail(),
       password: this.getPassword(),
       status: this.getStatus(),
+      userRole: this.getUserRole(),
+      profilePicture: this.getProfilePicture(),
       createdAt: this.getCreatedAt(),
       updatedAt: this.getUpdatedAt(),
-      userRole: this.getUserRole(),
     };
   }
 }

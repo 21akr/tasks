@@ -21,7 +21,7 @@ export class UpdateTaskParams {
 }
 
 export const UpdateTaskParamsSchema = joi.object<UpdateTaskParams>({
-  userId: joi.string().trim().required().pattern(new RegExp('^[0-9a-fA-F]{24}$')),
+  userId: joi.string().trim().pattern(new RegExp('^[0-9a-fA-F]{24}$')),
   title: joi.string(),
   description: joi.string(),
   status: joi.string().valid(...Object.values(TaskStatusEnum)),

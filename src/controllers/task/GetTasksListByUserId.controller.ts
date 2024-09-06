@@ -1,11 +1,11 @@
 import * as express from 'express';
 import { FilterQuery } from 'mongoose';
 import { BaseListInterface } from '../../core';
-import { GetTasksListParams, GetTasksListResponse, ListParams } from '../../definitions';
+import { BaseListParams, GetTasksListResponse, ListParams } from '../../definitions';
 import { getTasksListCase } from '../../cases';
 
 export async function GetTasksListByUserIdController(req: express.Request, res: express.Response) {
-  let params: GetTasksListParams;
+  let params: BaseListParams;
   let response: BaseListInterface<GetTasksListResponse> = {
     meta: {
       count: 0,
@@ -13,10 +13,11 @@ export async function GetTasksListByUserIdController(req: express.Request, res: 
     items: [],
   };
 
-  const filter: FilterQuery<any> = {};
+  const { userId } = req.params;
+  const filter: FilterQuery<any> = { userId };
 
   try {
-    params = await new GetTasksListParams(req.query).validate();
+    params = await new BaseListParams(req.query).validate();
   } catch (err) {
     console.error(err);
     return res.status(400).send(`Invalid request parameters \n ${err}`);
@@ -28,7 +29,9 @@ export async function GetTasksListByUserIdController(req: express.Request, res: 
         .split(' ')
         .filter(Boolean)
         .map((regex: string) => ({
-          $or: [{ username: { $regex: regex, $options: 'i' } }, { email: { $regex: regex, $options: 'i' } }],
+          $or: [
+            { title: { $regex: regex, $options: 'i' } },
+            { status: { $regex: regex, $options: 'i' } }],
         }));
     }
 

@@ -1,5 +1,5 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
-import moment from 'moment';
+import * as moment from 'moment';
 
 export class TokenService {
   protected _secret: string;

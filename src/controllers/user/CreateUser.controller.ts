@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { PasswordService } from '../../services';
+import { EmailService, PasswordService } from '../../services';
 import { Repository, UserEntity, UserStatusEnum } from '../../core';
 import { CreateUserParams, GetUserResponse } from '../../definitions';
 
@@ -16,7 +16,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
 
   try {
     const checkUser = await Repository.User().getByEmail(params.email);
-    if(checkUser) {
+    if (checkUser) {
       return res.status(409).send('This email belongs to an existing user');
     }
 
@@ -32,15 +32,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
       .buildUserRole(params.userRole)
       .buildPassword(hashedPassword);
 
-    // EmailService.SendVerificationCode(email, otp)
-
-    // await SendEmail({
-    //   from: 'test@example.com',
-    //   to: newUser.getEmail(),
-    //   subject: 'Set your password for your new account',
-    //   text: `Login: ${newUser.getEmail()}. Password: ${createPassword}`,
-    // });
-    console.log(createPassword);
+    await EmailService.SendVerificationCode(params.username, params.email, createPassword);
 
     const created = await Repository.User().create(newUser);
     response = new GetUserResponse(created);

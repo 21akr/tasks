@@ -1,15 +1,15 @@
 import * as express from 'express';
 import { Types } from 'mongoose';
-import { BaseIDParams, GetTaskResponse, UpdateTaskParams } from '../../definitions';
+import { BaseIdParams, GetTaskResponse, UpdateTaskParams } from '../../definitions';
 import { Repository } from '../../core';
 
 export async function UpdateTaskController(req: express.Request, res: express.Response) {
   let response: GetTaskResponse;
-  let idParams: BaseIDParams;
+  let idParams: BaseIdParams;
   let params: UpdateTaskParams;
 
   try {
-    idParams = await new BaseIDParams(req.params).validate();
+    idParams = await new BaseIdParams(req.params).validate();
     params = await new UpdateTaskParams(req.body).validate();
   } catch (err) {
     console.error(err);
@@ -17,12 +17,17 @@ export async function UpdateTaskController(req: express.Request, res: express.Re
   }
 
   try {
-    const task = await Repository.Task().getById(new Types.ObjectId(idParams.ID));
+    const task = await Repository.Task().getById(new Types.ObjectId(idParams.id));
     if (!task) {
       res.send('Task Not Found');
     }
 
-    const updated = task.buildUserId(params?.userId).buildTitle(params?.title).buildDescription(params?.description).buildStatus(params?.status);
+    const updated = task.buildTitle(params?.title).buildDescription(params?.description).buildStatus(params?.status);
+    if (params.userId) {
+      updated.buildUserId(params?.userId);
+    } else {
+      updated.buildUserId(req.user._id);
+    }
 
     response = new GetTaskResponse(updated);
     return res.json(response);

@@ -1,5 +1,5 @@
 import { compare, genSalt, hash } from 'bcrypt';
-import crypto from 'crypto';
+import * as crypto from 'crypto';
 
 export class PasswordService {
   private _password: string;

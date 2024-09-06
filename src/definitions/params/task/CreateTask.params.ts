@@ -21,8 +21,8 @@ export class CreateTaskParams {
 }
 
 export const CreateTaskParamsSchema = joi.object<CreateTaskParams>({
-  userId: joi.string().trim().required().pattern(new RegExp('^[0-9a-fA-F]{24}$')),
+  userId: joi.string().trim().pattern(new RegExp('^[0-9a-fA-F]{24}$')),
   title: joi.string().required(),
   description: joi.string(),
-  status: joi.string().valid(...Object.values(TaskStatusEnum)).default(TaskStatusEnum.TODO).required(),
+  status: joi.string().valid(...Object.values(TaskStatusEnum)).default(TaskStatusEnum.TODO),
 });

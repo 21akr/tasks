@@ -1,15 +1,15 @@
 import * as express from 'express';
-import { BaseUserRequestInterface, Repository, UserSessionStatusEnum, UserStatusEnum } from '../../core';
+import { BaseUserRequestInterface, Repository, UserSessionStatusEnum } from '../../core';
 
 export async function ProfileLogoutController(req: BaseUserRequestInterface, res: express.Response) {
-  const user = req?.user;
   const session = req?.session;
-
+  console.log(req);
   try {
-    await user.buildStatus(UserStatusEnum.INACTIVE);
+    if (!session) {
+      return res.status(400).json({ error: 'Session not found' });
+    }
     await session.buildStatus(UserSessionStatusEnum.INACTIVE);
 
-    await Repository.User().update(user);
     await Repository.UserSession().update(session);
 
     return res.status(200).send('Logged out!');

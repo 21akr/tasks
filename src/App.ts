@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { routes } from './Routes';
+import { taskRoutes, userRoutes } from './Routes';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { createServer, Server as HttpServer } from 'http';
@@ -40,7 +40,8 @@ export class App {
     this.server.use(bodyParser.json({ limit: '50mb' }));
     this.server.use(express.json());
     this.server.use(cookieParser());
-    this.server.use(routes);
+    this.server.use(userRoutes);
+    this.server.use(taskRoutes);
     this.http = createServer(this.server);
     this.http.listen(this.port).on('listening', () => {
       console.log(`Server listening on http://localhost:${this.port}`);
@@ -50,7 +51,6 @@ export class App {
   async connectMongo() {
     try {
       this.mongo = await new MongoService().buildUri(this.mongoUrl).buildOptions({ autoIndex: false }).connect();
-      console.log(`MongoDB uri: ${this.mongoUrl}`);
     } catch (error) {
       console.error('MongoDB connection error:', error);
     }

@@ -2,13 +2,14 @@ import * as joi from 'joi';
 
 export class BaseListParams {
   page: number;
-
   size: number;
+  search?: string;
 
   constructor(params: BaseListParams) {
-    if(params) {
+    if (params) {
       this.page = params.page;
       this.size = params.size;
+      this.search = params.search;
     }
   }
 
@@ -18,6 +19,7 @@ export class BaseListParams {
 }
 
 export const BaseSchemaParams = joi.object<BaseListParams>({
-  page: joi.number().max(999999999).empty(1).default(1),
-  size: joi.number().max(1000).empty(10).default(10),
+  search: joi.string(),
+  page: joi.number().max(999999999).empty(1),
+  size: joi.number().max(1000).empty(10),
 });

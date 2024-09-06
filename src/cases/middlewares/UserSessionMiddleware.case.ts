@@ -40,7 +40,6 @@ export class UserSessionMiddlewareCase implements BaseCaseInterface<UserSessionM
       if (session.getAccessToken() !== params.accessToken) {
         throw new Error('Invalid token');
       }
-
       if (user.getStatus() === UserStatusEnum.NEED_TO_CHANGE_PASSWORD && params.status !== UserStatusEnum.NEED_TO_CHANGE_PASSWORD) {
         throw new Error('Please, change your password');
       }

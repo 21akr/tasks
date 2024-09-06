@@ -1,7 +1,7 @@
 import * as express from 'express';
 import { PasswordService, TokenService } from '../../services';
 import { Types } from 'mongoose';
-import moment from 'moment';
+import * as moment from 'moment';
 import { ProfileLoginParams, ProfileLoginResponse } from '../../definitions';
 import { Repository, UserSessionEntity, UserSessionStatusEnum, UserStatusEnum } from '../../core';
 

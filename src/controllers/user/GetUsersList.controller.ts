@@ -1,11 +1,11 @@
 import * as express from 'express';
 import { FilterQuery } from 'mongoose';
 import { BaseListInterface } from '../../core';
-import { GetUsersListParams, GetUsersListResponse, ListParams } from '../../definitions';
+import { BaseListParams, GetUsersListResponse, ListParams } from '../../definitions';
 import { getUsersListCase } from '../../cases';
 
 export async function GetUsersListController(req: express.Request, res: express.Response) {
-  let params: GetUsersListParams;
+  let params: BaseListParams;
   let response: BaseListInterface<GetUsersListResponse> = {
     meta: {
       count: 0,
@@ -16,7 +16,7 @@ export async function GetUsersListController(req: express.Request, res: express.
   const filter: FilterQuery<any> = {};
 
   try {
-    params = await new GetUsersListParams(req.query).validate();
+    params = await new BaseListParams(req.query).validate();
   } catch (err) {
     console.error(err);
     return res.status(400).send(`Invalid request parameters \n ${err}`);

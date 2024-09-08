@@ -1,5 +1,5 @@
 import * as express from 'express';
-import { taskRoutes, userRoutes } from './Routes';
+import { fileRoutes, taskRoutes, userRoutes } from './Routes';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import { createServer, Server as HttpServer } from 'http';
@@ -42,6 +42,7 @@ export class App {
     this.server.use(cookieParser());
     this.server.use(userRoutes);
     this.server.use(taskRoutes);
+    this.server.use(fileRoutes);
     this.http = createServer(this.server);
     this.http.listen(this.port).on('listening', () => {
       console.log(`Server listening on http://localhost:${this.port}`);

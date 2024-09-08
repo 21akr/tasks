@@ -16,12 +16,11 @@ export async function CreateUserController(req: express.Request, res: express.Re
 
   try {
     const checkUser = await Repository.User().getByEmail(params.email);
-    if (checkUser) {
+    if(checkUser) {
       return res.status(409).send('This email belongs to an existing user');
     }
 
     const passwordService = new PasswordService();
-
     const createPassword = await passwordService.newPassword();
     const hashedPassword = await passwordService.hash(createPassword);
 
@@ -30,7 +29,7 @@ export async function CreateUserController(req: express.Request, res: express.Re
       .buildEmail(params.email)
       .buildStatus(UserStatusEnum.NEED_TO_CHANGE_PASSWORD)
       .buildUserRole(params.userRole)
-      .buildPassword(hashedPassword);
+      .buildPassword(hashedPassword)
 
     await EmailService.SendVerificationCode(params.username, params.email, createPassword);
 

@@ -9,7 +9,7 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema> {
   protected _password?: string;
   protected _status?: UserStatusEnum;
   protected _userRole?: UserRoleEnum;
-  protected _profilePicture?: string;
+  protected _profilePicture?: string | null;
   protected _createdAt?: Date;
   protected _updatedAt?: Date;
 
@@ -43,7 +43,7 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema> {
     return this;
   }
 
-  buildProfilePicture(profilePicture?: string): UserEntity {
+  buildProfilePicture(profilePicture?: string | null): UserEntity {
     this._profilePicture = profilePicture;
     return this;
   }
@@ -82,7 +82,7 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema> {
     return <UserRoleEnum>this._userRole;
   }
 
-  getProfilePicture(): string {
+  getProfilePicture(): string | null {
     return <string>this._profilePicture;
   }
 
@@ -95,7 +95,7 @@ export class UserEntity implements BaseEntityInterface<UserEntity, UserSchema> {
   }
 
   convertToEntity(user: UserSchema): UserEntity | null {
-    if (!user) return null;
+    if(!user) return null;
     this.buildId(user._id)
       .buildUsername(user.username)
       .buildEmail(user.email)

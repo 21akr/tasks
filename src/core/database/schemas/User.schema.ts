@@ -20,7 +20,7 @@ export class UserSchema {
   @prop({ enum: UserRoleEnum, type: String })
   userRole?: UserRoleEnum;
 
-  @prop({ type: String })
+  @prop({ type: String, default: null })
   profilePicture?: string;
 
   @prop({ type: Date, default: Date.now })

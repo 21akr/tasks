@@ -1,6 +1,5 @@
 import * as nodemailer from 'nodemailer';
 
-
 export class EmailService {
   static async SendVerificationCode(username: string, email: string, password: string): Promise<boolean> {
     try {

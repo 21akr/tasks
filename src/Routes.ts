@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   CreateTaskController,
   CreateUserController,
+  DeleteProfilePictureController,
   DeleteTaskByIdController,
   DeleteUserByIdController,
   GetTaskByIdController,
@@ -11,8 +12,10 @@ import {
   ProfileChangePasswordController,
   ProfileLoginController,
   ProfileLogoutController,
+  UpdateProfilePictureController,
   UpdateTaskController,
   UpdateUserController,
+  UploadProfilePictureController,
 } from './controllers';
 import { CheckAdminMiddleware, UserSessionMiddleware, UserTempSessionMiddleware } from './middlewares';
 
@@ -36,6 +39,14 @@ export const userRoutes = nestedRoutes('/user', user => {
   user.get('/list', CheckAdminMiddleware, GetUsersListController);
   user.get('/:id', CheckAdminMiddleware, GetUserByIdController);
   user.put('/:id', CheckAdminMiddleware, UpdateUserController);
+});
+
+export const fileRoutes = nestedRoutes('/file', file => {
+  file.use(UserSessionMiddleware);
+
+  file.post('/upload', UploadProfilePictureController);
+  file.put('/update', UpdateProfilePictureController);
+  file.delete('/delete', DeleteProfilePictureController);
 });
 
 export const taskRoutes = nestedRoutes('/task', task => {

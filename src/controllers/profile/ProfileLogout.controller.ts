@@ -3,7 +3,7 @@ import { BaseUserRequestInterface, Repository, UserSessionStatusEnum } from '../
 
 export async function ProfileLogoutController(req: BaseUserRequestInterface, res: express.Response) {
   const session = req?.session;
-  console.log(req);
+
   try {
     if (!session) {
       return res.status(400).json({ error: 'Session not found' });

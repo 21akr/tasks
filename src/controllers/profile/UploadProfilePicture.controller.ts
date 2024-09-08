@@ -5,7 +5,6 @@ import { Repository } from '../../core';
 const cdnService = new CdnService();
 
 export async function UploadProfilePictureController(req: express.Request, res: express.Response) {
-  // Check if user exists
   const user = await Repository.User().getById(req.user._id);
   if(!user) {
     return res.status(404).send('User Not Found');
@@ -15,17 +14,15 @@ export async function UploadProfilePictureController(req: express.Request, res: 
     return res.status(400).send('Profile picture already exists. Update instead!');
   }
 
-  // File upload handling
   let profilePicture: string | null;
   try {
-    profilePicture = await cdnService.uploadFile(req, res); // Upload the profile picture
+    profilePicture = await cdnService.uploadFile(req, res);
   } catch (err) {
     console.error('Error uploading profile picture:', err);
     return res.status(400).send('Error uploading profile picture');
   }
 
   try {
-    // Update user with new profile picture
     user.buildProfilePicture(profilePicture);
     await Repository.User().update(user);
 

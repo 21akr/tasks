@@ -27,7 +27,7 @@ export class CdnService {
           reject('No file uploaded');
         }
 
-        resolve(file.filename); // Return the filename for storing it in the database
+        resolve(file.filename);
       });
     });
   }

@@ -14,7 +14,12 @@ export async function DeleteTaskByIdController(req: express.Request, res: expres
   }
 
   try {
-    const deleted = await Repository.Task().deleteById(new Types.ObjectId(params.id));
+    const task = await Repository.Task().getById(new Types.ObjectId(params.id));
+    if(task.getUserId() !== req.user._id) {
+      return res.send('You can delete only your tasks!');
+    }
+
+    const deleted = await Repository.Task().deleteById(task.getId());
 
     return res.json({ taskDeleted: deleted });
   } catch (err) {

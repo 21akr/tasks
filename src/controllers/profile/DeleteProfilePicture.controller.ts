@@ -5,7 +5,6 @@ import { Repository } from '../../core';
 const cdnService = new CdnService();
 
 export async function DeleteProfilePictureController(req: express.Request, res: express.Response) {
-  // Check if the user exists
   const user = await Repository.User().getById(req.user._id);
   if(!user) {
     return res.status(404).send('User Not Found');
@@ -13,13 +12,10 @@ export async function DeleteProfilePictureController(req: express.Request, res: 
 
   const oldPicture = user.getProfilePicture();
 
-  // Check if the user has a profile picture to delete
   if(oldPicture) {
     try {
-      // Delete the picture from the CDN
       await cdnService.deleteFile(oldPicture);
 
-      // Clear the profile picture field in the user's record
       user.buildProfilePicture(null);
       await Repository.User().update(user);
 

@@ -14,16 +14,16 @@ export async function CreateTaskController(req: express.Request, res: express.Re
   }
 
   try {
+    const user = await Repository.User().getById(req.user._id);
+    if(!user) {
+      return res.status(404).send('User Not Found');
+    }
+
     const newTask = new TaskEntity()
+      .buildUserId(user.getId())
       .buildStatus(params?.status)
       .buildTitle(params?.title)
       .buildDescription(params?.description);
-
-    if (params.userId) {
-      newTask.buildUserId(params?.userId);
-    } else {
-      newTask.buildUserId(req.user._id);
-    }
 
     const created = await Repository.Task().create(newTask);
 

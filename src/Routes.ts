@@ -7,6 +7,7 @@ import {
   DeleteUserByIdController,
   GetTaskByIdController,
   GetTasksListByUserIdController,
+  GetTasksListController,
   GetUserByIdController,
   GetUsersListController,
   ProfileChangePasswordController,
@@ -53,8 +54,9 @@ export const taskRoutes = nestedRoutes('/task', task => {
   task.use(UserSessionMiddleware);
 
   task.post('/', CreateTaskController);
-  task.get('/list/:userId', GetTasksListByUserIdController);
-  task.get('/:id', GetTaskByIdController);
+  task.get('/list/', GetTasksListController);
+  task.get('/list/:userId', CheckAdminMiddleware, GetTasksListByUserIdController);
+  task.get('/:id', CheckAdminMiddleware, GetTaskByIdController);
   task.put('/:id', UpdateTaskController);
   task.delete('/:id', DeleteTaskByIdController);
 });

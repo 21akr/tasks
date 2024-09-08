@@ -18,16 +18,15 @@ export async function UpdateTaskController(req: express.Request, res: express.Re
 
   try {
     const task = await Repository.Task().getById(new Types.ObjectId(idParams.id));
-    if (!task) {
+    if(!task) {
       res.send('Task Not Found');
     }
 
-    const updated = task.buildTitle(params?.title).buildDescription(params?.description).buildStatus(params?.status);
-    if (params.userId) {
-      updated.buildUserId(params?.userId);
-    } else {
-      updated.buildUserId(req.user._id);
+    if(task.getUserId() !== req.user._id) {
+      return res.send('You can change only your tasks!');
     }
+
+    const updated = task.buildUserId(req.user._id).buildTitle(params?.title).buildDescription(params?.description).buildStatus(params?.status);
 
     response = new GetTaskResponse(updated);
     return res.json(response);
